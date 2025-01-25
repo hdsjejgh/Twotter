@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.urls import path,include
 from . import views
 
-
+#handles default urls (without any extra things on them)
 urlpatterns = [
-    path('',views.home,name="home")
+    path('',views.home,name="home"),
+    path('profile_list/',views.profile_list,name="profile_list"),
 ]

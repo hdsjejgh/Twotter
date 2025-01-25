@@ -8,10 +8,12 @@ from django.dispatch import receiver
 
 class Profile(models.Model): #profile model is in every user model
     user = models.OneToOneField(User, on_delete=models.CASCADE) #each user has one unique profile
+    #user automatically gets linked to profile when profile is linked to it
     follows = models.ManyToManyField("self", #follows contain any amount of other profiles
                                      related_name="followed_by",
                                      symmetrical=False, #so following doesn't have to go both ways
                                      blank=True) #following can be blank
+    date_modified = models.DateTimeField(User, auto_now=True)
     def __str__(self): #so the profile is displayed as the username
         return self.user.username
 
