@@ -13,7 +13,7 @@ class Profile(models.Model): #profile model is in every user model
                                      related_name="followed_by",
                                      symmetrical=False, #so following doesn't have to go both ways
                                      blank=True) #following can be blank
-    date_modified = models.DateTimeField(User, auto_now=True)
+    date_modified = models.DateTimeField(User, auto_now=True) #last time a profile was modified
     def __str__(self): #so the profile is displayed as the username
         return self.user.username
 
