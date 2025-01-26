@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% if profile %}
+
+<div class="container text-center">
+    <div class="row">
+        <div class="col-8">
+            <h1>{{ profile.user.username }}</h1>
+        </div>
+        <div class="col-4">
+
+            <div class="card">
+  <div class="card-header">
+    Follows
+  </div>
+  <div class="card-body">
+    {% for following in profile.follows.all %}
+                {% if profile != following %}
+                <a href="{% url 'profile' following.user.id %}">@{{ following }}</a> <br>
+                {% endif %}
+            {% endfor %}
+  </div>
+</div>
+
+
+
+                      <div class="card">
+  <div class="card-header">
+    Followed By
+  </div>
+  <div class="card-body">
+    {% for following in profile.followed_by.all %}
+{% if profile != following %}
+<a href="{% url 'profile' following.user.id %}">@{{ following }}</a> <br>
+{% endif %}
+{% endfor %}
+  </div>
+</div>
+
+
+</div></div></div>
+    {% endif %}
+
+{% endblock %}
