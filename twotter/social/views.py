@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
-from .models import Profile
+from .models import Profile, Twoot
 from django.contrib import messages
 # Create your views here.
 def home(request):
-    return render(request, 'home.html',{})
+    if request.user.is_authenticated:
+        twoots = Twoot.objects.all().order_by("-created_at") #gets all twoots ordered newest to oldest
+    return render(request, 'home.html',{"twoots":twoots})
 
 def profile_list(request):
     if request.user.is_authenticated: #if user is logged in, go to the profile list page
@@ -18,7 +20,7 @@ def profile(request, pk):
     if request.user.is_authenticated: #cannot view profiles unless logged in
 
         profile = Profile.objects.get(user_id=pk)
-
+        twoots = profile.user.Twoots.all().order_by("-created_at") #gets all twoots made by user ordered newest to oldest
         #post form logic
         if request.method == "POST":
             user_profile = request.user.profile #user's profile
@@ -29,7 +31,7 @@ def profile(request, pk):
                 user_profile.follows.add(profile)
             user_profile.save() #saves changes
 
-        return render(request, "profile.html", {"profile":profile})
+        return render(request, "profile.html", {"profile":profile,"twoots":twoots})
     else:
         messages.success(request, ("You must be logged in to view this page"))
         return redirect('home')

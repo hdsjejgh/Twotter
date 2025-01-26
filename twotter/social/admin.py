@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group,User
-from .models import Profile
+from .models import Profile, Twoot
+
 # Register your models here.
 
 #django automatically created a group model, it isnt needed
@@ -16,3 +17,10 @@ class UserAdmin(admin.ModelAdmin): #the actual user thing that gets displayed in
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin) #unregister and reregister the user model so it only shows the things in UserAdmin in the admin interface
+
+admin.site.register(Twoot) #registers twoots in admin panel so you can see them
+
+
+
+
+

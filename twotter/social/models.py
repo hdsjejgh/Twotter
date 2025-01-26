@@ -6,6 +6,20 @@ from django.dispatch import receiver
 
 # Create your models here.
 
+
+class Twoot(models.Model): #model for a twooter (offbrand tweet)
+    user = models.ForeignKey( #many to one relationship between twoot and user, since many tweets can belong to one user
+        User,
+        related_name="Twoots", #so you can access twoots of a user
+        on_delete=models.DO_NOTHING)
+    body = models.CharField(max_length=256) #max character count for twoot is 256
+    created_at = models.DateTimeField(auto_now_add=True) #created at date is used for sorting
+
+    def __str__(self):
+        return f"(@{self.user})  \"{self.body}\"" #represents twoots in admin panel
+
+
+
 class Profile(models.Model): #profile model is in every user model
     user = models.OneToOneField(User, on_delete=models.CASCADE) #each user has one unique profile
     #user automatically gets linked to profile when profile is linked to it
