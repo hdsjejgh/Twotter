@@ -16,7 +16,19 @@ def profile_list(request):
 
 def profile(request, pk):
     if request.user.is_authenticated: #cannot view profiles unless logged in
+
         profile = Profile.objects.get(user_id=pk)
+
+        #post form logic
+        if request.method == "POST":
+            user_profile = request.user.profile #user's profile
+            action = request.POST['follow'] #gets value given by the form button
+            if action == "unfollow": #unfollows currently selected profile
+                user_profile.follows.remove(profile)
+            elif action == "follow": #follows currently selected profile
+                user_profile.follows.add(profile)
+            user_profile.save() #saves changes
+
         return render(request, "profile.html", {"profile":profile})
     else:
         messages.success(request, ("You must be logged in to view this page"))
