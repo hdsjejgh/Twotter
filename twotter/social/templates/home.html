@@ -4,10 +4,10 @@
 <br><h1><u>Home</u></h1><br>
 
 {% for twoot in twoots %}
-
+<!--Creates a card for every tweet-->
 <div class="card">
   <div class="card-header">
-      <a href="{% url 'profile' twoot.user.profile.user_id %}" style="text-decoration:none; color:blue;" >@{{ twoot.user|lower }}</a>
+      <a href="{% url 'profile' twoot.user.profile.user_id %}" style="text-decoration:none; color:blue;" >@{{ twoot.user|lower }}</a> <!--Links to profile of twoot author-->
   </div>
   <div class="card-body">
     <blockquote class="blockquote mb-0">

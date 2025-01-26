@@ -2,14 +2,14 @@
 
 {% block content %}
 
-    {% if profile %}
+    {% if profile and profile is not None %} <!--Only run if the profile exists-->
 <br>
 <div class="container text-center">
     <div class="row">
         <div class="col-8">
-            <h1>{{ profile.user.username }}</h1>
+            <h1>{{ profile.user.username }}</h1> <!--Displayes username-->
 <br>
-            {% if twoots %}
+            {% if twoots %} <!--Shows all of the user's twoots if they have any-->
             {% for twoot in twoots %}
 
 <div class="card">
@@ -25,13 +25,13 @@
 </div>
 <br>
 {% endfor %}
-            {% else %}
+            {% else %} <!--If user hasnt posted anything, say they haven't-->
             <p class="text-secondary">{{ profile.user.username }} hasn't posted any Twoots yet.</p>
             {% endif %}
         </div>
         <div class="col-4">
 
-            <div class="card">
+            <div class="card"> <!--Card shows everyone user is following-->
   <div class="card-header">
     Follows
   </div>
@@ -46,7 +46,7 @@
 
 <br>
 
-                      <div class="card">
+                      <div class="card"> <!--Card shows everyone user is followed by-->
   <div class="card-header">
     Followed By
   </div>
@@ -58,13 +58,13 @@
 {% endfor %}
   </div>
 </div>
-            {% if profile.id != user.profile.id %}
+            {% if profile.id != user.profile.id %} <!--If opened profile isn't user's profile, show a follow/unfollow button-->
             <br>
             <form method=POST>
                 {% csrf_token %}
-                {% if profile in user.profile.follows.all %}
+                {% if profile in user.profile.follows.all %} <!--If user already followed-->
                 <button class="btn btn-outline-danger" name="follow" value="unfollow" type = "submit" >Unfollow @{{profile.user.username|lower}} </button>
-                {% else %}
+                {% else %} <!--if user not followed-->
                 <button class="btn btn-outline-success" name="follow" value="follow" type = "submit" >Follow @{{profile.user.username|lower}} </button>
                 {% endif %}
             </form>
@@ -72,6 +72,10 @@
 <br>
 
 </div></div></div>
+
+{% else %}
+<br>
+<h1>Profile not found</h1>
     {% endif %}
 
 {% endblock %}

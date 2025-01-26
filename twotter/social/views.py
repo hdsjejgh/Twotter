@@ -18,9 +18,12 @@ def profile_list(request):
 
 def profile(request, pk):
     if request.user.is_authenticated: #cannot view profiles unless logged in
-
-        profile = Profile.objects.get(user_id=pk)
-        twoots = profile.user.Twoots.all().order_by("-created_at") #gets all twoots made by user ordered newest to oldest
+        try:
+            profile = Profile.objects.get(user_id=pk)
+            twoots = profile.user.Twoots.all().order_by("-created_at") #gets all twoots made by user ordered newest to oldest
+        except:
+            profile = None
+            twoots=None
         #post form logic
         if request.method == "POST":
             user_profile = request.user.profile #user's profile
