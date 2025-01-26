@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<br><h1><u>Home</u></h1><br>
+<br><h1 class="text-center"><u>Home</u></h1><br>
 
+<div class="container text-center">
+    <div class="row">
+        <div class="col-8">
 {% for twoot in twoots %}
 <!--Creates a card for every tweet-->
 <div class="card">
@@ -18,4 +21,17 @@
 </div>
 <br><br>
 {% endfor %}
+        </div>
+    <div class="col-4">
+{% if form %}
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }} <!--form.as_p renders the form-->
+
+  <button type="submit" class="btn btn-info">Twoot</button>
+        </form>
+{% endif %}
+    </div>
+
+    </div></div>
 {% endblock %}

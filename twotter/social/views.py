@@ -1,11 +1,24 @@
 from django.shortcuts import render, redirect
 from .models import Profile, Twoot
 from django.contrib import messages
+from .forms import TwootForm
+
 # Create your views here.
 def home(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated: #if user logged in
+        form = TwootForm(request.POST or None) #create form
+        if request.method=="POST":
+            if form.is_valid(): #if valid twoot
+                twoot = form.save(commit=False)
+                twoot.user = request.user
+                twoot.save() #add new twoot
+                messages.success(request, ("Twoot Posted")) #show success message
+                return redirect('home')
         twoots = Twoot.objects.all().order_by("-created_at") #gets all twoots ordered newest to oldest
-    return render(request, 'home.html',{"twoots":twoots})
+        return render(request, 'home.html',{"twoots":twoots,"form":form})
+    else: #only show twoots (not form) when user not logged in
+        twoots = Twoot.objects.all().order_by("-created_at") #gets all twoots ordered newest to oldest
+        return render(request, 'home.html', {"twoots": twoots})
 
 def profile_list(request):
     if request.user.is_authenticated: #if user is logged in, go to the profile list page
