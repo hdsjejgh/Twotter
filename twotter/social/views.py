@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .models import Profile, Twoot
 from django.contrib import messages
 from .forms import TwootForm
+from django.contrib.auth import authenticate,login,logout
+
 
 # Create your views here.
 def home(request):
@@ -21,13 +23,9 @@ def home(request):
         return render(request, 'home.html', {"twoots": twoots})
 
 def profile_list(request):
-    if request.user.is_authenticated: #if user is logged in, go to the profile list page
-        profiles = Profile.objects.exclude(user=request.user) #sends all profiles except user's profile to be displayed
-        return render(request, 'profile_list.html',{'profiles':profiles})
 
-    else: #if not logged in, redirect to home and send a warning message
-        messages.success(request, ("You must be logged in to view this page"))
-        return redirect('home')
+    profiles = Profile.objects.all() if not request.user.is_authenticated else Profile.objects.exclude(user=request.user)  # sends all profiles except user's profile (if logged in) to be displayed
+    return render(request, 'profile_list.html', {'profiles': profiles})
 
 def profile(request, pk):
     if request.user.is_authenticated: #cannot view profiles unless logged in
@@ -51,3 +49,27 @@ def profile(request, pk):
     else:
         messages.success(request, ("You must be logged in to view this page"))
         return redirect('home')
+
+def login_user(request):
+    if request.method == "POST": #if attempting to log in
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password) #user = None if invalid username or password
+        if user is not None: #if valid username or password
+            login(request,user)
+            messages.success(request, ("Successfully logged in"))
+            return redirect('home')
+        else: #if invalid username or password
+            messages.success(request, ("Invalid username or password"))
+            return redirect('login')
+
+    else: #if just openning the page
+        return render(request, 'login.html',{})
+
+
+def logout_user(request): #justs logs the user out
+    logout(request)
+    messages.success(request, ("Successfully logged out"))
+    return redirect('home')
+
+
