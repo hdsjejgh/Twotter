@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Profile, Twoot
 from django.contrib import messages
-from .forms import TwootForm
+from .forms import TwootForm, RegisterForm
 from django.contrib.auth import authenticate,login,logout
 
 
@@ -72,4 +72,19 @@ def logout_user(request): #justs logs the user out
     messages.success(request, ("Successfully logged out"))
     return redirect('home')
 
+def register_user(request):
+    form = RegisterForm() #creates new instance of registration form
+    if request.method == "POST": #if user tries to register
+        form = RegisterForm(request.POST)
+        if form.is_valid(): #if valid info
+            form.save() #creates iser
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+
+            user = authenticate(username=username, password=password) #logs user in
+            login(request, user)
+            messages.success(request, ("Account registered successfully"))
+            return redirect('home')
+
+    return render(request, 'register_user.html', {'form':form}) #displays the form
 
