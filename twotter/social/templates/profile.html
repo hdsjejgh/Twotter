@@ -68,8 +68,13 @@
                 <button class="btn btn-outline-success" name="follow" value="follow" type = "submit" >Follow @{{profile.user.username|lower}} </button>
                 {% endif %}
             </form>
+            {% else %}
+            <br><br><br>
+            <a href="{% url 'update_user' %}" class="btn btn-outline-secondary" >Update Profile</a>
+
+
             {% endif %}
-<br>
+
 
 </div></div></div>
 

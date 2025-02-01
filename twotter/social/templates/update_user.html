@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<br>
+<h1>Update Profile</h1> <br>
+
+<div class="mb-3">
+    {% if form %}
+<form method="POST" action="{% url 'register' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <br>
+    <button type="submit" class="btn btn-info">Update</button>
+</form>
+    {% endif %}
+</div>
+{% endblock %}

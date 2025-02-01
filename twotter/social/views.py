@@ -3,6 +3,7 @@ from .models import Profile, Twoot
 from django.contrib import messages
 from .forms import TwootForm, RegisterForm
 from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -75,7 +76,7 @@ def logout_user(request): #justs logs the user out
 def register_user(request):
     form = RegisterForm() #creates new instance of registration form
     if request.method == "POST": #if user tries to register
-        form = RegisterForm(request.POST)
+        form = RegisterForm(request.POST or None)
         if form.is_valid(): #if valid info
             form.save() #creates iser
             username = form.cleaned_data['username']
@@ -87,4 +88,22 @@ def register_user(request):
             return redirect('home')
 
     return render(request, 'register_user.html', {'form':form}) #displays the form
+
+def update_user(request):
+    if request.user.is_authenticated: #if user signed in
+        currentUser = User.objects.get(id=request.user.id) #gets current user
+        form = RegisterForm(request.POST or None, instance=currentUser) #sets form to edit current user's info
+
+        if form.is_valid(): #if form is valid then update user data
+            form.save()
+            login(request,currentUser)
+            messages.success(request, ("Information successfully updated"))
+
+        return render(request, 'update_user.html', {'form':form})
+    else: #if user not signed in
+        messages.success(request, ("Must be logged in to edit profile")) #return user to home page and say you must be signed in
+        return redirect('home')
+
+
+
 
