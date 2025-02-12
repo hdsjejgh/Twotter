@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Profile, Twoot
 from django.contrib import messages
-from .forms import TwootForm, RegisterForm
+from .forms import TwootForm, RegisterForm, ProfilePicForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
 
@@ -92,14 +92,15 @@ def register_user(request):
 def update_user(request):
     if request.user.is_authenticated: #if user signed in
         currentUser = User.objects.get(id=request.user.id) #gets current user
+        profile_user = Profile.objects.get(user__id=request.user.id) #gets current user's profile
         form = RegisterForm(request.POST or None, instance=currentUser) #sets form to edit current user's info
-
-        if form.is_valid(): #if form is valid then update user data
+        profile_form = ProfilePicForm(request.POST or None, request.FILES or None, instance=profile_user) #makes form to edit current users profile pic
+        if form.is_valid() and profile_form.is_valid(): #if forms are valid then update user data
             form.save()
-            login(request,currentUser)
+            profile_form.save()
             messages.success(request, ("Information successfully updated"))
 
-        return render(request, 'update_user.html', {'form':form})
+        return render(request, 'update_user.html', {'form':form,'profile_form':profile_form})
     else: #if user not signed in
         messages.success(request, ("Must be logged in to edit profile")) #return user to home page and say you must be signed in
         return redirect('home')

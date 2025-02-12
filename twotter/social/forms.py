@@ -1,7 +1,14 @@
 from django import forms
-from .models import Twoot
+from .models import Twoot, Profile
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+
+#profile extras form
+class ProfilePicForm(forms.ModelForm):
+    profile_image = forms.ImageField(label="Profile Picture")
+    class Meta:
+        model = Profile
+        fields = ('profile_image',)
 
 class TwootForm(forms.ModelForm): #form for making twoots
     body = forms.CharField(required=True, widget = forms.widgets.Textarea(

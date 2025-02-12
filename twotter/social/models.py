@@ -28,6 +28,7 @@ class Profile(models.Model): #profile model is in every user model
                                      symmetrical=False, #so following doesn't have to go both ways
                                      blank=True) #following can be blank
     date_modified = models.DateTimeField(User, auto_now=True) #last time a profile was modified
+    profile_image = models.ImageField(null=True,blank=True,upload_to='images/') #profile image
     def __str__(self): #so the profile is displayed as the username
         return self.user.username
 
@@ -38,3 +39,4 @@ def create_profile(sender,instance,created,**kwargs):
         user_profile.save()
         user_profile.follows.set([instance.profile.id]) #makes profile follow themselves
         user_profile.save()
+

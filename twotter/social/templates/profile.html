@@ -30,7 +30,10 @@
             {% endif %}
         </div>
         <div class="col-4">
-
+{% if profile.profile_image %} <!--Profile picture-->
+<img src="{{ profile.profile_image.url }}" class="rounded-circle" height="150" width="150">
+{% endif %}
+            <br><br>
             <div class="card"> <!--Card shows everyone user is following-->
   <div class="card-header">
     Follows

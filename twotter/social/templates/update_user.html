@@ -5,12 +5,15 @@
 
 <div class="mb-3">
     {% if form %}
-<form method="POST" action="{% url 'register' %}">
+<form method="POST" action="" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
+    <br>
+    {{ profile_form.as_p }}
     <br>
     <button type="submit" class="btn btn-info">Update</button>
 </form>
     {% endif %}
+
 </div>
 {% endblock %}
